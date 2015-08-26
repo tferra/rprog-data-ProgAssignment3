@@ -1,4 +1,4 @@
-rankhospital <- function(state,outcome, num = "best"){
+rankhospital <- function(state,outcome = "heart attack", num = 20){
   t1 <- data.frame()
   colName <- "Hospital.30.Day.Death..Mortality..Rates.from."
   care <-  read.csv("outcome-of-care-measures.csv", colClasses = "character")
@@ -20,12 +20,16 @@ rankhospital <- function(state,outcome, num = "best"){
   nulls <-  t1[colName]=="Not Available"
   t1 <- t1[!nulls,]
   t1[,colName] <- as.numeric(t1[,colName])
-  if (as.numeric(num)){
-    pos <- as.numeric(num)
-  }else if(num == "best"){
+   if(num == "best"){
     pos <- 1
   }else if(num == "worst"){
     pos <- nrow(t1)
+  }else if (as.numeric(num)){
+    pos <- as.numeric(num)
+  }else{
+    stop("invalid num")
   }
   return(t1[order(t1[colName]),2][pos])
 }
+
+
